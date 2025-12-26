@@ -1,11 +1,9 @@
 import "../styles/header.css"
 
-export default function Header() {
-
-
+export default function Header({ header }) {
     return(
         <header className="header">
-            <h1>Home Page</h1>
+            <h1>{header}</h1>
         </header>
     )
 }

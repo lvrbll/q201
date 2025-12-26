@@ -17,9 +17,10 @@
     border: none;
     border-radius: calc(var(--size-base) * 4);
     font-family: "Noto Sans SemiBold";
-    margin: calc(var(--size-base) * 2);
+    margin: calc(var(--size-base) * 3);
     padding: calc(var(--size-base) * 3);
     cursor: pointer;
+    text-decoration: none;
 
     /*---chatgpt fragment---*/
         outline: 2px solid transparent;
@@ -42,4 +43,18 @@
 .navigation-button-image-container {
     width: 40%;
     height: 90%;
+}
+
+.main-panel-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 62.5%;
+    box-sizing: border-box;
+    padding: calc(var(--size-base) * 2);
+    align-items: center;
+}
+
+.router-link {
+    display: none;
 }
