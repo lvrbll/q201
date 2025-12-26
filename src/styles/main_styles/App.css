@@ -1,0 +1,33 @@
+.app {
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+    background-color: #0E101D;
+}
+
+.navigation-button-separator {
+    width: 100%;
+    color: #1BD96A;
+}
+
+.button-nav {
+    display: flex;
+    align-items: center;
+    background-color: #1E223D;
+    border: none;
+    border-radius: calc(var(--size-base) * 4);
+    font-family: "Noto Sans SemiBold";
+    margin: calc(var(--size-base) * 2);
+    padding: calc(var(--size-base) * 3);
+}
+
+.navigation-button-text-container {
+    font-size: calc(var(--size-base) * 6);
+    color: #1BD96A;
+    width: 60%;
+}
+
+.navigation-button-image-container {
+    width: 40%;
+    height: 90%;
+}

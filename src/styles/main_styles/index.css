@@ -1,0 +1,13 @@
+@font-face {
+  font-family: "Noto Sans Regular";
+  src: url("../../assets/fonts/NotoSans-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Noto Sans SemiBold";
+  src: url("../../assets/fonts/NotoSans-SemiBold.ttf") format("truetype");
+}
+
+html, body, #root {
+  font-family: "Noto Sans Regular";
+}

@@ -1,0 +1,22 @@
+.left-panel-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 18.75%;
+    box-sizing: border-box;
+    padding: calc(var(--size-base) * 2);
+}
+
+.react-icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: calc(var(--size-base) * 6);
+}
+
+.left-navigation-buttons-container {
+    display: flex;
+    flex-direction: column;
+    padding: calc(var(--size-base) * 3);
+}
+
