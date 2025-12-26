@@ -15,9 +15,18 @@ export default function NewCard() {
         }
 
         var array = JSON.parse(localStorage.getItem("card"));
-        console.log(array);
         array.push(card);
         localStorage.setItem("card", JSON.stringify(array))
+    }
+
+    function parseImage(img, card) {
+        const fr = new FileReader();
+        fr.readAsDataURL(img);
+        fr.addEventListener('load', () => {
+            const url = fr.result;
+            card.cardImage = url;
+            putToLocalStorage(card);
+        });
     }
 
     function handleAddWordButtonClick() {
@@ -50,32 +59,37 @@ export default function NewCard() {
         const cardDescription = event.currentTarget.elements.cardDescription.value;
 
         let t;
-        if(event.currentTarget.elements.cardFileUpload.value === "") {
+        console.log(event.currentTarget.elements.cardFileUpload.files[0])
+        if(event.currentTarget.elements.cardFileUpload.files[0] === undefined) {
             t = "empty";
         } else {
-            t = event.currentTarget.elements.cardFileUpload.value;
+            t = event.currentTarget.elements.cardFileUpload.files[0];
         }
-
         const cardImage = t;
 
         if(quantity === 1) {
             const cardWordDefault = event.currentTarget.elements.cardWordDefault.value;
             const cardWordTranslation = event.currentTarget.elements.cardWordTranslation.value;
             
-            console.log(
-                "Card name: " + cardName + " | " +
-                "Card description: " + cardDescription + " | " +
-                "Card image" + cardImage + " | " +
-                "Card default words: " + cardWordDefault + " | " +
-                "Card translated words: " + cardWordTranslation
-            );
+            // console.log(
+            //     "Card name: " + cardName + " | " +
+            //     "Card description: " + cardDescription + " | " +
+            //     "Card image" + cardImage + " | " +
+            //     "Card default words: " + cardWordDefault + " | " +
+            //     "Card translated words: " + cardWordTranslation
+            // );
 
             const card = {
                 cardName: cardName, 
                 cardDescription: cardDescription, 
-                cardImage: cardImage, 
+                cardImage: "", 
                 cardWordDefault: cardWordDefault,
                 cardWordTranslation: cardWordTranslation
+            }
+
+            if(cardImage != "empty") {
+                parseImage(cardImage, card);
+                return;
             }
 
             putToLocalStorage(card);
@@ -97,20 +111,25 @@ export default function NewCard() {
         })
         const cardWordTranslationArrayMapped = temporaryDef;
         
-        console.log(
-            "Card name: " + cardName + " | " +
-            "Card description: " + cardDescription + " | " +
-            "Card image" + cardImage + " | " +
-            "Card default words: " + cardWordDefaultArrayMapped + " | " +
-            "Card translated words: " + cardWordTranslationArrayMapped
-        );
+        // console.log(
+        //     "Card name: " + cardName + " | " +
+        //     "Card description: " + cardDescription + " | " +
+        //     "Card image" + cardImage + " | " +
+        //     "Card default words: " + cardWordDefaultArrayMapped + " | " +
+        //     "Card translated words: " + cardWordTranslationArrayMapped
+        // );
 
         const card = {
                 cardName: cardName, 
                 cardDescription: cardDescription, 
-                cardImage: cardImage, 
+                cardImage: "", 
                 cardWordDefault: cardWordDefaultArrayMapped,
                 cardWordTranslation: cardWordTranslationArrayMapped
+        }
+
+        if(cardImage != "empty") {
+            parseImage(cardImage, card);
+            return;
         }
 
         putToLocalStorage(card);

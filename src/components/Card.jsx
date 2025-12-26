@@ -1,13 +1,18 @@
 import "../styles/card.css"
 import img from "../assets/images/arsen_markaryan.jpg"
+import { useState } from "react";
 
 export default function Card(props) {
+    const [image, setImg] = useState(() => {
+        const img = new Image();
+        return img.src = props.cardImage;
+    });
 
     return(
         <article className="card-container">
 
             <div className="card-image-container">
-                <img src={props.cardImage === "empty" ? props.cardImage : img} className="card-image"></img>
+                <img src={props.cardImage === "empty" || props.cardImage === "" ? img : image} className="card-image"></img>
             </div>
 
             <div className="card-info-container">
