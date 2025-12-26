@@ -12,6 +12,12 @@
     align-items: center;
     justify-content: center;
     padding: calc(var(--size-base) * 6);
+    will-change: filter;
+    transition: filter 300ms;
+}
+
+.account-icon-container:hover {
+    filter: drop-shadow(0 0 2em #4CD69E);
 }
 
 .right-navigation-buttons-container {

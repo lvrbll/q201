@@ -1,0 +1,71 @@
+.card-container {
+    display: flex;
+    flex-direction: column;
+    background-color: #2A2E50;
+    padding: calc(var(--size-base) * 4);
+    border-radius: calc(var(--size-base) * 4);
+    max-width: 25%;
+    width: 100%;
+    margin: calc(var(--size-base) * 4);
+}
+
+.card-image {
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+    border-radius: 16px;
+}
+
+.card-image-container {
+    padding-bottom: calc(var(--size-base) * 4);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    vertical-align: middle;
+    width: 100%;
+    height: 50%;
+}
+
+.card-info-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    border: 5px dashed #44ee8b;
+    padding: calc(var(--size-base) * 4);
+    color: var(--primary-color);
+    font-family: "Noto Sans SemiBold";
+    text-align: center;
+}
+
+.card-button-container {
+    padding-top: calc(var(--size-base) * 4);
+    display: flex;
+    justify-content: center;
+}
+
+.card-button {
+    background-color: var(--primary-color);
+    border: none;
+    width: 100%;
+    max-width: 75%;
+    padding: calc(var(--size-base) * 2);
+    border-radius: calc(var(--size-base) * 4);
+    color:#1E223D;
+    font-family: "Noto Sans SemiBold";
+    cursor: pointer;
+
+
+    /*---chatgpt fragment---*/
+            outline: 2px solid transparent;
+            outline-offset: 6px;
+            transition: outline-color .25s ease, outline-offset .25s ease;
+    }
+
+    .card-button:hover {
+        outline-color: var(--primary-color);
+        outline-offset: 2px;
+    }
+    /*----------------------------*/

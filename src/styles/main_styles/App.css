@@ -7,7 +7,7 @@
 
 .navigation-button-separator {
     width: 100%;
-    color: #1BD96A;
+    color: var(--primary-color);
 }
 
 .button-nav {
@@ -19,11 +19,23 @@
     font-family: "Noto Sans SemiBold";
     margin: calc(var(--size-base) * 2);
     padding: calc(var(--size-base) * 3);
-}
+    cursor: pointer;
+
+    /*---chatgpt fragment---*/
+        outline: 2px solid transparent;
+        outline-offset: 6px;
+        transition: outline-color .25s ease, outline-offset .25s ease;
+    }
+
+    .button-nav:hover {
+        outline-color: var(--primary-color);
+        outline-offset: 2px;
+    }
+    /*----------------------------*/
 
 .navigation-button-text-container {
     font-size: calc(var(--size-base) * 6);
-    color: #1BD96A;
+    color: var(--primary-color);
     width: 60%;
 }
 

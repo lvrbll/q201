@@ -1,0 +1,12 @@
+.card-gallery-container {
+    background-color: #1E223D;
+    display: flex;
+    flex-direction: row;
+    border-radius: calc(var(--size-base) * 4);
+    padding: calc(var(--size-base) * 6);
+    color: #1BD96A;
+    max-width: 83%;
+    width: 100%;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}

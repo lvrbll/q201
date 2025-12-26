@@ -6,9 +6,11 @@ import "../styles/main_styles/App.css"
 export default function App() {
   return (
     <div className="app">
+
         <LeftPanel />
         <MainPanel />
         <RightPanel />
+        
     </div>
   );
 }
