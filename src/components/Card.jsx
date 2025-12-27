@@ -1,12 +1,17 @@
 import "../styles/card.css"
 import img from "../assets/images/arsen_markaryan.jpg"
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function Card(props) {
     const [image, setImg] = useState(() => {
         const img = new Image();
         return img.src = props.cardImage;
     });
+
+    function handleButtonOpenClick() {
+        
+    }
 
     return(
         <article className="card-container">
@@ -30,9 +35,11 @@ export default function Card(props) {
             </div>
 
             <div className="card-button-container">
-                <button className="card-button">
-                    Open
-                </button>
+                <Link className="card-button" to={`/cardPage/${props.cardId}`}>
+                    <button className="card-button" onClick={() => handleButtonOpenClick()}>
+                        Open
+                    </button>
+                </Link>
             </div>
 
         </article>

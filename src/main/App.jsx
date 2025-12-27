@@ -2,6 +2,7 @@ import AddNewCardPage from "../components/pages/AddNewCardPage";
 import MainPanel from "../components/pages/MainPanel";
 import AccountSettingsPage from "../components/pages/AccountSettingsPage"
 import LogInPage from "../components/pages/LogInPage"
+import CardPage from "../components/pages/CardPage";
 import NotFoundPage from "../components/pages/NotFoundPage";
 import LeftPanel from "../components/LeftPanel";
 import RightPanel from "../components/RightPanel";
@@ -16,8 +17,9 @@ export default function App() {
         <Routes>
           <Route path="/" element={<MainPanel />}/>
           <Route path="/addNewCardPage" element={<AddNewCardPage />}/>
-          <Route path="/accountSettings" element={<AccountSettingsPage />}/>
+          <Route path="/accountSettingsPage" element={<AccountSettingsPage />}/>
           <Route path="/logInPage" element={<LogInPage />}/>
+          <Route path="/cardPage/:id" element={<CardPage />}/>
           <Route path="*" element={<NotFoundPage />}/>
         </Routes>
         <RightPanel />

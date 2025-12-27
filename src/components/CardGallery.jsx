@@ -13,7 +13,8 @@ export default function CardGallery() {
             {
                 cardsArray.map((item, key) => (
                     <Card 
-                        key={key} 
+                        key={key}
+                        cardId = {item.cardId}
                         cardName={item.cardName} 
                         cardDescription={item.cardDescription} 
                         cardImage={item.cardImage} 

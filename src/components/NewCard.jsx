@@ -67,6 +67,8 @@ export default function NewCard() {
         }
         const cardImage = t;
 
+        const cardId = crypto.randomUUID();
+
         if(quantity === 1) {
             const cardWordDefault = event.currentTarget.elements.cardWordDefault.value;
             const cardWordTranslation = event.currentTarget.elements.cardWordTranslation.value;
@@ -80,6 +82,7 @@ export default function NewCard() {
             // );
 
             const card = {
+                cardId: cardId,
                 cardName: cardName, 
                 cardDescription: cardDescription, 
                 cardImage: "", 
@@ -120,6 +123,7 @@ export default function NewCard() {
         // );
 
         const card = {
+                cardId: cardId,
                 cardName: cardName, 
                 cardDescription: cardDescription, 
                 cardImage: "", 
