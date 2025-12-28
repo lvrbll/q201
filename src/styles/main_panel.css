@@ -1,0 +1,9 @@
+.main-panel-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 62.5%;
+    box-sizing: border-box;
+    padding: calc(var(--size-base) * 2);
+    align-items: center;
+}

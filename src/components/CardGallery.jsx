@@ -10,8 +10,8 @@ export default function CardGallery() {
     
     return(
         <div className="card-gallery-container">
-            {
-                cardsArray.map((item, key) => (
+            {(cardsArray.length > 0) ? 
+            cardsArray.map((item, key) => (
                     <Card 
                         key={key}
                         cardId = {item.cardId}
@@ -21,8 +21,9 @@ export default function CardGallery() {
                         cardWordDefault={item.cardWordDefault} 
                         cardWordTranslation={item.cardWordTranslation}
                     />
-                ))
-            }
+            )) 
+            : 
+            <h1 className="card-gallery-warning">Nothing to show. Please, add a new Card!</h1>}
         </div>
     )
 }

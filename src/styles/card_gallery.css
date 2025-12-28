@@ -1,3 +1,8 @@
+.card-gallery-warning {
+    font-size: calc(var(--size-base) * 8);
+    font-family: "Noto Sans SemiBold";
+}
+
 .card-gallery-container {
     background-color: #1E223D;
     display: flex;

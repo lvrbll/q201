@@ -73,21 +73,14 @@ export default function NewCard() {
             const cardWordDefault = event.currentTarget.elements.cardWordDefault.value;
             const cardWordTranslation = event.currentTarget.elements.cardWordTranslation.value;
             
-            // console.log(
-            //     "Card name: " + cardName + " | " +
-            //     "Card description: " + cardDescription + " | " +
-            //     "Card image" + cardImage + " | " +
-            //     "Card default words: " + cardWordDefault + " | " +
-            //     "Card translated words: " + cardWordTranslation
-            // );
-
             const card = {
                 cardId: cardId,
                 cardName: cardName, 
                 cardDescription: cardDescription, 
                 cardImage: "", 
                 cardWordDefault: cardWordDefault,
-                cardWordTranslation: cardWordTranslation
+                cardWordTranslation: cardWordTranslation,
+                cardQuantity: 1
             }
 
             if(cardImage != "empty") {
@@ -114,21 +107,14 @@ export default function NewCard() {
         })
         const cardWordTranslationArrayMapped = temporaryDef;
         
-        // console.log(
-        //     "Card name: " + cardName + " | " +
-        //     "Card description: " + cardDescription + " | " +
-        //     "Card image" + cardImage + " | " +
-        //     "Card default words: " + cardWordDefaultArrayMapped + " | " +
-        //     "Card translated words: " + cardWordTranslationArrayMapped
-        // );
-
         const card = {
                 cardId: cardId,
                 cardName: cardName, 
                 cardDescription: cardDescription, 
                 cardImage: "", 
                 cardWordDefault: cardWordDefaultArrayMapped,
-                cardWordTranslation: cardWordTranslationArrayMapped
+                cardWordTranslation: cardWordTranslationArrayMapped,
+                cardQuantity: quantity
         }
 
         if(cardImage != "empty") {
