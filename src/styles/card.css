@@ -29,7 +29,6 @@
 .card-info-container {
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
     align-items: center;
     justify-content: center;
     vertical-align: middle;
@@ -38,6 +37,7 @@
     color: var(--primary-color);
     font-family: "Noto Sans SemiBold";
     text-align: center;
+    overflow: hidden;
 }
 
 .card-button-container {
@@ -51,10 +51,10 @@
     border: none;
     width: 100%;
     max-width: 75%;
-    padding: calc(var(--size-base) * 2);
+    padding: calc(var(--size-base) * 1);
     border-radius: calc(var(--size-base) * 4);
-    color:#1E223D;
     font-family: "Noto Sans SemiBold";
+    font-size: calc(var(--size-base) * 4);
     cursor: pointer;
     text-align: center;
     text-decoration: none;

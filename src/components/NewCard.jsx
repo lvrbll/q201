@@ -77,7 +77,7 @@ export default function NewCard() {
                 cardId: cardId,
                 cardName: cardName, 
                 cardDescription: cardDescription, 
-                cardImage: "", 
+                cardImage: "empty", 
                 cardWordDefault: cardWordDefault,
                 cardWordTranslation: cardWordTranslation,
                 cardQuantity: 1
@@ -111,7 +111,7 @@ export default function NewCard() {
                 cardId: cardId,
                 cardName: cardName, 
                 cardDescription: cardDescription, 
-                cardImage: "", 
+                cardImage: "empty", 
                 cardWordDefault: cardWordDefaultArrayMapped,
                 cardWordTranslation: cardWordTranslationArrayMapped,
                 cardQuantity: quantity

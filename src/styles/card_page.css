@@ -1,3 +1,59 @@
+.button-dialog {
+    color: black;
+    background-color: #D1F7E1;
+    border: none;
+    padding: calc(var(--size-base) * 2);
+    margin: calc(var(--size-base) * 2);
+    border-radius:  calc(var(--size-base) * 6);
+    font-family: "Noto Sans SemiBold";
+    width: 100%;
+}
+
+.dialog-buttons-container {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.dialog-form-element {
+    padding: calc(var(--size-base) * 2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dialog-form-element input {
+    border: none;
+    border-radius: calc(var(--size-base) * 4);
+    padding: calc(var(--size-base) * 2);
+}
+
+.dialog-general-container {
+    padding: calc(var(--size-base) * 2);
+    font-size: calc(var(--size-base) * 5);
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.card-page-dialog-form-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-page-dialog {
+    background: rgba(125, 106, 192, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    padding: calc(var(--size-base) * 6);
+    color: #D1F7E1;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+
+/*------------------------------*/
+
+
 .card-page-label {
     cursor: pointer;
     width: 100%;
@@ -28,6 +84,7 @@
     text-align: center;
     align-items: center;
     font-style: italic;
+    min-width: 0;
 }
 
 .card-page-words-container {
@@ -37,6 +94,9 @@
     border: 1px solid var(--primary-color);
     padding: calc(var(--size-base) * 4);
     margin: calc(var(--size-base) * 2);
+    width: 100%;
+    max-width: 50%;
+    cursor: pointer;
 }
 
 .card-page-showcase-words-container {
@@ -80,10 +140,23 @@
     flex: 1;
 }
 
+.card-page-showcase-info p:first-child {
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.card-page-showcase-info p:last-child {
+    flex: 1;
+    min-width: 0;
+    white-space: normal;
+    word-break: break-word;
+}
+
 .card-page-showcase-info {
     display: flex;
     width: 100%;
-    justify-content: space-between;
+    justify-content: start;
+    gap: 8px;
 }
 
 .card-page-separator-container {
@@ -95,10 +168,8 @@
     flex-direction: row;
     border: 2px solid var(--primary-color);
     padding: calc(var(--size-base) * 4);
-    display: flex;
     max-width: 50%;
     width: 100%;
-    flex-direction: row;
     flex-wrap: wrap;
     margin: calc(var(--size-base) * 4);
 }
