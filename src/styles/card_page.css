@@ -1,3 +1,7 @@
+.word-key {
+    display: none;
+}
+
 .button-dialog {
     color: black;
     background-color: #D1F7E1;
@@ -53,6 +57,42 @@
 
 /*------------------------------*/
 
+.card-page-delete-button {
+    width: 100%;
+    height: 100%;
+    background-color: #FF6B6B;
+    border: none;
+    border-radius: calc(var(--size-base) * 4);
+    cursor: pointer;
+    font-family: "Noto Sans SemiBold";
+    font-size: calc(var(--size-base) * 4);
+}
+
+.card-page-delete-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    width: 100%;
+    border-radius: calc(var(--size-base) * 4);
+    max-width: 50%;
+    margin: calc(var(--size-base) * 2);
+    cursor: pointer;
+    font-family: "Noto Sans SemiBold";
+    font-size: calc(var(--size-base) * 4);
+
+    /*---chatgpt fragment---*/
+            outline: 2px solid transparent;
+            outline-offset: 6px;
+            transition: outline-color .25s ease, outline-offset .25s ease;
+    }
+
+    /*----------------------------*/
+
+.card-page-delete-link:hover {
+    outline-offset: 2px;
+    outline-color: #FF6B6B;
+}
 
 .card-page-label {
     cursor: pointer;
@@ -133,7 +173,7 @@
         outline-offset: 2px;
     }
     /*----------------------------*/
-
+   
 .card-page-showcase-buttons-container {
     display: flex;
     justify-content: space-evenly;

@@ -3,11 +3,14 @@ import "../../styles/card_page.css";
 import img from "../../assets/images/unknown_card_image.jpg"
 import Header from "../Header";
 import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function CardPage() {
     const {id} = useParams();
-    const dialogReference = useRef(null);
-
+    const dialogChangeReference = useRef(null);
+    const dialogAddReference = useRef(null);
+    
+    const [key, setKey] = useState(0);
     const [card, setCard] = useState(() => {
         const stored = localStorage.getItem("card");
         let a = JSON.parse(stored);
@@ -22,74 +25,118 @@ export default function CardPage() {
         return res.filter((array) => array !== undefined);
     });
 
-    function changeWords(newDefaultWord, newTranslatedWord, key) {
-        // if(card[0].cardQuantity === 1) {
-        //     const newCard = card.map(item => {
-        //         item.cardWordDefault = newDefaultWord;
-        //         item.cardWordTranslation = newTranslatedWord;
-        //         return item;
-        //     })
 
-        //     setCard(newCard)
-        //     updateLocalStorage(newCard);
-        //     closeDialog();
-        //     return;
-        // }
-
-        // const newCard = card.map(item => {
-        //         item.cardWordDefault.map(i => {
-        //             console.log(i);
-        //         });
-        //         // item.cardWordTranslation = newTranslatedWord;
-        //         return item;
-        // })
-    }
-
-    function handleDialogForm(event) {
-        event.preventDefault();
-        const newDefaultWord = event.currentTarget.elements.defaultWord.value;
-        const newTranslatedWord = event.currentTarget.elements.translatedWord.value;
-
-
-        changeWords(newDefaultWord, newTranslatedWord);
-    }
-
-    function toggleChangeDialog() {
-        if(!dialogReference.current) {
+    function toggleChangeDialog(e) {
+        setKey(e.currentTarget.dataset.key);
+        if(!dialogChangeReference.current) {
             return;
         }
-        dialogReference.current.hasAttribute("open")
-            ? dialogReference.current.close()
-            : dialogReference.current.showModal();
+        dialogChangeReference.current.hasAttribute("open")
+            ? dialogChangeReference.current.close()
+            : dialogChangeReference.current.showModal();
+    
+    }
+
+    function changeWords(newDefaultWord, newTranslatedWord, targetKey) {
+        if (checkIsEmpty(newDefaultWord, newTranslatedWord)) {
+            closeDialog();
+        }
+        const newCard = card.map(item => {
+                item.cardWordDefault[targetKey] = newDefaultWord;
+                item.cardWordTranslation[targetKey] = newTranslatedWord;
+                return item;
+        })
+        setCard(newCard);
+        updateLocalStorage(newCard);
+    }
+
+    function handleChangeDialogForm(e) {
+        const newDefaultWord = e.currentTarget.elements.defaultWord.value;
+        const newTranslatedWord = e.currentTarget.elements.translatedWord.value;
+        const targetKey = e.currentTarget.elements.wordKey.value;
+
+        changeWords(newDefaultWord, newTranslatedWord, targetKey);
+    }
+
+    function handleAddDialogForm(e) {
+        const newDefaultWord = e.currentTarget.elements.defaultWord.value;
+        const newTranslatedWord = e.currentTarget.elements.translatedWord.value;
+
+        addNewWords(newDefaultWord, newTranslatedWord);
+    }
+
+    function toggleAddDialog() {
+        if(!dialogAddReference.current) {
+            return;
+        }
+        dialogAddReference.current.hasAttribute("open")
+            ? dialogAddReference.current.close()
+            : dialogAddReference.current.showModal();
+    
+    }
+
+    function addNewWords(newDefaultWord, newTranslatedWord) {
+        if (checkIsEmpty(newDefaultWord, newTranslatedWord)) {
+            closeDialog();
+            return;
+        }
+        const newCard = card.map(item => {
+            item.cardWordDefault.push(newDefaultWord);
+            item.cardWordTranslation.push(newTranslatedWord);
+            item.cardQuantity += 1;
+            return item;
+        })
+        setCard(newCard);
+        updateLocalStorage(newCard);
     }
 
     function closeDialog() {
-        dialogReference.current.close();
+        dialogChangeReference.current.close();
+        dialogAddReference.current.close();
+    }
+
+    function checkIsEmpty(newDefaultWord, newTranslatedWord) {
+        if(newDefaultWord === null || newDefaultWord === "" || newTranslatedWord === null || newTranslatedWord === "") {
+            alert("New words can't be empty");
+            return true;
+        }
+        return false;
+    }
+
+    function handleRemoveWords(e) {
+        const elemnetIndex = e.currentTarget.form.firstChild.value;
+        const newCard = card.map(item => {
+            item.cardWordDefault.splice(elemnetIndex, 1);
+            item.cardWordTranslation.splice(elemnetIndex, 1);
+            item.cardQuantity -= 1;
+            return item;
+        });
+        setCard(newCard);
+        updateLocalStorage(newCard);
+        closeDialog();
+    }
+
+    function handleDeleteCardClick (e) {
+        const data = JSON.parse(localStorage.getItem("card"));
+        const newData = data.map(item => {
+            if(JSON.stringify(item) == JSON.stringify(card[0])) {
+                console.log("xoxma")
+                return null;
+            }
+            return item;
+        }).filter((item) => item !== null);
+        console.log(newData)
+        localStorage.clear();
+        localStorage.setItem("card", JSON.stringify(newData));
     }
 
     const words = renderWords();
     function renderWords() {
-        if(card[0].cardQuantity === 1) {
-            return  <div className="card-page-words-container" onClick={toggleChangeDialog}>
-                        <div className="card-page-showcase-word">
-                            <p>{card[0].cardWordDefault}</p>
-                        </div>
-                        <div className="card-page-showcase-word">
-                            <hr className="card-page-words-separator"></hr>
-                        </div>
-                        <div className="card-page-showcase-word">
-                            <p>{card[0].cardWordTranslation}</p>
-                        </div>
-                    </div>;         
-        }
-
-        console.log("kocnhil w trusy: ", card[0].cardQuantity)
-
         const arrayDefaultWords = card[0].cardWordDefault;
         const arrayTranslatedWords = card[0].cardWordTranslation;
         const result = [];
         for(var i = 0; i < arrayDefaultWords.length; i++) {
-            result.push(<div className="card-page-words-container" key={i} onClick={toggleChangeDialog}>
+            result.push(<div className="card-page-words-container" data-key={i} key={i} onClick={toggleChangeDialog}>
                             <div className="card-page-showcase-word">
                                 <p>{arrayDefaultWords[i]}</p>
                             </div>
@@ -219,16 +266,26 @@ export default function CardPage() {
                             </label>
                             <input id="cardPageFileUpload" name="cardPageFileUpload" type="file" onChange={(e) => handleClickButtonImageChange(e)}/>
                         </div>
+                        <Link className="card-page-delete-link" to="/" onClick={() => handleDeleteCardClick()}>
+                            <button className="card-page-delete-button">
+                                Eradicate Card
+                            </button>
+                        </Link>
                     </div>
                 </article>
 
                 <div className="card-page-showcase-words-container">
+                    <button className="card-page-change-buttons" onClick={(e) => toggleAddDialog(e)}>
+                        Add a new word
+                    </button>
+
                     {words}
                 </div>
             </main>
         </div>
-        <dialog className="card-page-dialog" ref={dialogReference}>
-            <form className="card-page-dialog-form-container" onSubmit={handleDialogForm}>
+        <dialog className="card-page-dialog" ref={dialogChangeReference}>
+            <form className="card-page-dialog-form-container" onSubmit={(e) => handleChangeDialogForm(e)}>
+                <input type="text" id="wordKey" name="wordKey" value={key} className="word-key" readOnly/>
                 <div className="dialog-general-container">
                     <div className="dialog-form-element">
                         <label htmlFor="defaultWord">Type a new default word:</label>
@@ -241,7 +298,27 @@ export default function CardPage() {
                 </div>
                 <div className="dialog-buttons-container">
                     <button type="submit" className="button-dialog">Submit</button>
-                    <button type="button" className="button-dialog" onClick={closeDialog}>Cancel</button>
+                    <button type="button" className="button-dialog" onClick={(e) => closeDialog(e)}>Cancel</button>
+                    <button type="button" className="button-dialog" onClick={(e) => handleRemoveWords(e)}>Delete words</button>
+                </div>
+            </form>
+        </dialog>
+        <dialog className="card-page-dialog" ref={dialogAddReference}>
+            <form className="card-page-dialog-form-container" onSubmit={(e) => handleAddDialogForm(e)}>
+                <div className="dialog-general-container">
+                    <div className="dialog-form-element">
+                        <label htmlFor="defaultWord">Type a new default word:</label>
+                        <input type="text" id="defaultWord" name="defaultWord"/>
+                    </div>
+                    <div className="dialog-form-element">
+                        <label htmlFor="translatedWord">Type a new translated word:</label>
+                        <input type="text" id="translatedWord" name="translatedWord"/>
+                    </div>
+                    <input type="text" id="wordKey" name="wordKey" value={key} className="word-key" readOnly/>
+                </div>
+                <div className="dialog-buttons-container">
+                    <button type="submit" className="button-dialog">Submit</button>
+                    <button type="button" className="button-dialog" onClick={(e) => closeDialog(e)}>Cancel</button>
                 </div>
             </form>
         </dialog>

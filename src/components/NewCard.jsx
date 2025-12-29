@@ -59,7 +59,6 @@ export default function NewCard() {
         const cardDescription = event.currentTarget.elements.cardDescription.value;
 
         let t;
-        console.log(event.currentTarget.elements.cardFileUpload.files[0])
         if(event.currentTarget.elements.cardFileUpload.files[0] === undefined) {
             t = "empty";
         } else {
@@ -69,43 +68,29 @@ export default function NewCard() {
 
         const cardId = crypto.randomUUID();
 
+        console.log(event.currentTarget.elements.cardWordDefault);
+
+        let cardWordDefaultArrayUnmapped = [];
+        let cardWordTranslationArrayUnmapped = [];
+
         if(quantity === 1) {
-            const cardWordDefault = event.currentTarget.elements.cardWordDefault.value;
-            const cardWordTranslation = event.currentTarget.elements.cardWordTranslation.value;
-            
-            const card = {
-                cardId: cardId,
-                cardName: cardName, 
-                cardDescription: cardDescription, 
-                cardImage: "empty", 
-                cardWordDefault: cardWordDefault,
-                cardWordTranslation: cardWordTranslation,
-                cardQuantity: 1
-            }
-
-            if(cardImage != "empty") {
-                parseImage(cardImage, card);
-                return;
-            }
-
-            putToLocalStorage(card);
-            return;
+            cardWordDefaultArrayUnmapped.push(event.currentTarget.elements.cardWordDefault);
+            cardWordTranslationArrayUnmapped.push(event.currentTarget.elements.cardWordTranslation);
+        } else {
+            cardWordDefaultArrayUnmapped = Array.from(event.currentTarget.elements.cardWordDefault);
+            cardWordTranslationArrayUnmapped = Array.from(event.currentTarget.elements.cardWordTranslation);
         }
 
-        const cardWordDefaultArrayUnmapped = Array.from(event.currentTarget.elements.cardWordDefault);
-        const cardWordTranslationArrayUnmapped = Array.from(event.currentTarget.elements.cardWordTranslation);
-
-        let temporaryDef = [];
+        const cardWordDefaultArrayMapped = [];
         cardWordDefaultArrayUnmapped.map(item => {
-            temporaryDef.push(item.value);
+            cardWordDefaultArrayMapped.push(item.value);
         })
-        const cardWordDefaultArrayMapped = temporaryDef;
 
-        temporaryDef = [];
+        const cardWordTranslationArrayMapped = [];
         cardWordTranslationArrayUnmapped.map(item => {
-            temporaryDef.push(item.value);
+            console.log(item);
+            cardWordTranslationArrayMapped.push(item.value);
         })
-        const cardWordTranslationArrayMapped = temporaryDef;
         
         const card = {
                 cardId: cardId,
@@ -116,6 +101,8 @@ export default function NewCard() {
                 cardWordTranslation: cardWordTranslationArrayMapped,
                 cardQuantity: quantity
         }
+
+        console.log(card);
 
         if(cardImage != "empty") {
             parseImage(cardImage, card);
