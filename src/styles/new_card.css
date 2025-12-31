@@ -86,11 +86,43 @@ input[type="file"] {
     border: 2px solid var(--primary-color);
     padding: calc(var(--size-base) * 4);
     display: flex;
-    max-width: 50%;
     width: 100%;
+    max-width: 50%;
     flex-direction: row;
     flex-wrap: wrap;
-}   
+    flex-grow: 2;
+}
+
+.card-form-word-container.import {
+    border: 2px solid #5362ca;
+    color: #5362ca;
+}
+
+.navigation-button-separator.import {
+    color: #5362ca;
+}
+
+.card-form-word-container-main {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    max-width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: calc(var(--size-base) * 4)
+}
+
+.card-word-button-remove {
+    background: none;
+    text-decoration: none;
+    border: none;
+}
+
+.card-word-button-remove-container {
+    width: 100%;
+    max-width: 10%;
+    flex-grow: 1;
+}
 
 .card-word-default-container {
     display: flex;
@@ -116,4 +148,22 @@ input[type="file"] {
     display: flex;
     width: 100%;
     justify-content: space-between;
+}
+
+.button-delete-image {
+    will-change: filter;
+    transition: filter 300ms;
+}
+
+.button-delete-image:hover {
+    filter: drop-shadow(0 0 1em var(--primary-color));
+}
+
+.button-delete-image.import {
+    will-change: filter;
+    transition: filter 300ms;
+}
+
+.button-delete-image:hover.import {
+    filter: drop-shadow(0 0 1em #5362ca);
 }
