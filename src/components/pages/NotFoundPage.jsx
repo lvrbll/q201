@@ -4,7 +4,7 @@ export default function NotFoundPage(){
 
     return(
         <div className="main-panel-container">
-            <img src={img} alt="mussolini" />
+            <img src={img} alt="nothing to show" />
         </div>
     );
 }

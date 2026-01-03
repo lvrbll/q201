@@ -1,0 +1,72 @@
+.log-in-page-text {
+    font-size: calc(var(--size-base) * 20);
+    margin: calc(var(--size-base) * 4);
+    background-image: linear-gradient(#4CD69E, #1BD96A);
+    color: transparent;
+    background-clip: text;
+    text-shadow: 1px 1px 2px;
+    padding: calc(var(--size-base) * 4);
+}
+
+.log-in-page-form-element {
+    padding: calc(var(--size-base) * 2);
+    display: flex;
+    text-decoration: none;
+    justify-content: space-between;
+}
+
+.log-in-page-form-element input {
+    border: none;
+    border-radius: calc(var(--size-base) * 4);
+    padding: calc(var(--size-base) * 2);
+}
+
+.log-in-page-form-element label {
+    padding: calc(var(--size-base) * 2);
+    font-size: calc(var(--size-base) * 6);
+}
+
+.log-in-page-form-element button {
+    border: none;
+    border-radius: calc(var(--size-base) * 4);
+    background-color: var(--primary-color);
+    font-family: "Noto Sans SemiBold";
+    font-size: calc(var(--size-base) * 4);
+    width: 100%;
+    cursor: pointer;
+    margin: var(--size-base);
+    outline: 2px solid transparent;
+    outline-offset: 6px;
+    transition: outline-color .25s ease, outline-offset .25s ease;
+}
+
+.log-in-page-form-element button:hover {
+    outline-offset: 2px;
+    outline-color: var(--primary-color);
+}
+
+
+
+.log-in-page-form {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid var(--primary-color);
+    background-image: linear-gradient(#4CD69E, #1BD96A);
+    color: transparent;
+    background-clip: text;
+    text-shadow: 1px 1px 2px;
+    width: 100%;
+    max-width: 25%;
+}
+
+.log-in-page-container {
+    display: flex;
+    flex-direction: column;
+    font-family: "Noto Sans SemiBold";
+    color: var(--primary-color);
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    max-width: 100%;
+}

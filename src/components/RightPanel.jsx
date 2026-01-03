@@ -16,7 +16,7 @@ export default function RightPanel() {
             <div className="right-navigation-buttons-container">
                 <hr className="navigation-button-separator"/>
 
-                <Link className="button-nav button-settings" to="/accountSettingsPage">
+                <Link className="button-nav button-settings" to="/settingsPage">
                     <div className="navigation-button-image-container">
                         <img src={SettingsIcon} alt="Folder Icon" className="navigation-button-image"/>
                     </div>
@@ -37,18 +37,6 @@ export default function RightPanel() {
                 </Link>
 
                 <hr className="navigation-button-separator"/>
-
-                <Link className="button-nav button-log-in" to="/logInPage">
-                    <div className="navigation-button-image-container">
-                        <img src={LogOutIcon} alt="Folder Icon" className="navigation-button-image-log-in"/>
-                    </div>
-                    <div className="navigation-button-text-container">
-                        <h3 className="navigation-button-text">Log In</h3>
-                    </div>
-                </Link>
-
-                <hr className="navigation-button-separator"/>
-
             </div>
         </nav>
     )
