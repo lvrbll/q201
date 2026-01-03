@@ -1,0 +1,96 @@
+.learn-buttons.learn-general-buttons {
+    width: 100%;
+    max-width: 15%;
+    font-size: calc(var(--size-base) * 4);
+    margin: 0;
+}
+
+.learn-state-container {
+    display: flex;
+    align-items: center;
+    padding: calc(var(--size-base) * 2);
+    font-family: "Noto Sans SemiBold";
+}
+
+.learn-save-exit-container {
+    display: flex;
+    max-width: 100%;
+    width: 25%;
+    text-decoration: none;
+}
+
+.learn-buttons {
+    width: 100%;
+    margin: calc(var(--size-base) * 2);
+    border-radius: calc(var(--size-base) * 4);
+    text-decoration: none;
+    border: none;
+    background-color: var(--primary-color);
+    font-size: calc(var(--size-base) * 4);
+    font-family: "Noto Sans SemiBold";
+    cursor: pointer;
+    /*---chatgpt fragment---*/
+            outline: 2px solid transparent;
+            outline-offset: 6px;
+            transition: outline-color .25s ease, outline-offset .25s ease;
+    }
+
+    .learn-buttons:hover {
+        outline-color: var(--primary-color);
+        outline-offset: 2px;
+    }
+    /*----------------------------*/
+
+.learn-utility-buttons-container {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.learn-navigation-container {
+    display: flex;
+    justify-content: space-between;
+    padding: calc(var(--size-base) * 4); 
+    max-width: 50%;
+    width: 100%
+}
+
+.learn-utility-container {
+    display: flex;
+    flex-direction: column;
+    padding: calc(var(--size-base) * 4); 
+    align-items: center;
+}
+
+.learn-content-container {
+    font-family: "Noto Sans SemiBold";
+    font-size: calc(var(--size-base) * 5);
+    padding: calc(var(--size-base) * 4);
+    background-color: #1F2348;
+    border-radius: calc(var(--size-base) * 4);
+    max-width: 50%;
+    width: 100%;
+    text-align: center;
+}
+
+.learn-general-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 60%;
+    background-color: #2A2E50;
+    padding: calc(var(--size-base) * 12);
+    border-radius: calc(var(--size-base) * 4);
+    flex-wrap: nowrap;
+}
+
+.learn-container {
+    background-color: #1E223D;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: calc(var(--size-base) * 4);
+    padding: calc(var(--size-base) * 6);
+    color: var(--primary-color);
+    max-width: 83%;
+    width: 100%;
+}

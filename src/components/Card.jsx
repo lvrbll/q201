@@ -1,5 +1,5 @@
-import "../styles/card.css"
-import img from "../assets/images/unknown_card_image.jpg"
+import "../styles/card.css";
+import img from "../assets/images/unknown_card_image.jpg";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 

@@ -39,17 +39,6 @@ export default function LeftPanel() {
 
                 <hr className="navigation-button-separator"/>
 
-                <Link className="button-nav button-import-card" to="/importPage">
-                    <div className="navigation-button-image-container">
-                        <img src={AddIcon} alt="Folder Icon" className="navigation-button-image"/>
-                    </div>
-                    <div className="navigation-button-text-container">
-                        <h3 className="navigation-button-text">Import</h3>
-                    </div>
-                </Link>
-
-                <hr className="navigation-button-separator"/>
-
             </div>
 
         </nav>

@@ -7,10 +7,10 @@ export default function NewCard() {
     const [quantity, setQuantity] = useState(0);
     const [wordFields, setWordFields] = useState([]);
     const [importTransWords, setImportTransWords] = useState([]);
-     const [importDefWords, setImportDefWords] = useState([]);
+    const [importDefWords, setImportDefWords] = useState([]);
 
     const importedFields = importedWords();
-    
+
     function importedWords() {
         let tempOutput = [];
         for(var i = 0; i < importDefWords.length; i++) {
@@ -182,6 +182,11 @@ export default function NewCard() {
         cardWordTranslationArrayUnmapped.map(item => {
             cardWordTranslationArrayMapped.push(item.value);
         })
+
+        const cardState = [];
+        for(var i = 0; i < cardWordDefaultArrayMapped.length; i++) {
+            cardState.push("unstudied");
+        }
         
         const card = {
                 cardId: cardId,
@@ -190,6 +195,7 @@ export default function NewCard() {
                 cardImage: "empty", 
                 cardWordDefault: cardWordDefaultArrayMapped,
                 cardWordTranslation: cardWordTranslationArrayMapped,
+                cardState: cardState,
                 cardQuantity: quantity
         }
 

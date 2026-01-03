@@ -5,6 +5,7 @@ import LogInPage from "../components/pages/LogInPage"
 import ImportPage from "../components/pages/ImportPage"
 import DevPage from "../components/pages/DevPage"
 import CardPage from "../components/pages/CardPage";
+import CardLearnPage from "../components/pages/CardLearnPage";
 import NotFoundPage from "../components/pages/NotFoundPage";
 import LeftPanel from "../components/LeftPanel";
 import RightPanel from "../components/RightPanel";
@@ -23,6 +24,7 @@ export default function App() {
           <Route path="/logInPage" element={<DevPage />}/>
           <Route path="/importPage" element={<ImportPage />}/>
           <Route path="/cardPage/:id" element={<CardPage />}/>
+          <Route path="/cardPage/cardLearnPage/:id" element={<CardLearnPage />}/>
           <Route path="*" element={<NotFoundPage />}/>
         </Routes>
         <RightPanel />

@@ -1,9 +1,9 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import "../../styles/card_page.css";
-import img from "../../assets/images/unknown_card_image.jpg"
+import img from "../../assets/images/unknown_card_image.jpg";
 import Header from "../Header";
 import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function CardPage() {
     const {id} = useParams();
@@ -24,7 +24,7 @@ export default function CardPage() {
         });
         return res.filter((array) => array !== undefined);
     });
-
+    const navigate = useNavigate();
 
     function toggleChangeDialog(e) {
         setKey(e.currentTarget.dataset.key);
@@ -83,6 +83,7 @@ export default function CardPage() {
         const newCard = card.map(item => {
             item.cardWordDefault.push(newDefaultWord);
             item.cardWordTranslation.push(newTranslatedWord);
+            item.cardState.push("unstudied");
             item.cardQuantity += 1;
             return item;
         })
@@ -108,6 +109,7 @@ export default function CardPage() {
         const newCard = card.map(item => {
             item.cardWordDefault.splice(elemnetIndex, 1);
             item.cardWordTranslation.splice(elemnetIndex, 1);
+            item.cardState.splice(elemnetIndex, 1);
             item.cardQuantity -= 1;
             return item;
         });
@@ -134,9 +136,11 @@ export default function CardPage() {
     function renderWords() {
         const arrayDefaultWords = card[0].cardWordDefault;
         const arrayTranslatedWords = card[0].cardWordTranslation;
+        const arrayState = card[0].cardState;
         const result = [];
         for(var i = 0; i < arrayDefaultWords.length; i++) {
-            result.push(<div className="card-page-words-container" data-key={i} key={i} onClick={toggleChangeDialog}>
+            if(arrayState[i] === "unstudied") {
+                result.push(<div className="card-page-words-container" data-key={i} key={i} onClick={toggleChangeDialog}>
                             <div className="card-page-showcase-word">
                                 <p>{arrayDefaultWords[i]}</p>
                             </div>
@@ -146,7 +150,21 @@ export default function CardPage() {
                             <div className="card-page-showcase-word">
                                 <p>{arrayTranslatedWords[i]}</p>
                             </div>
-                        </div>);            
+                </div>);  
+            } else {
+                result.push(<div className="card-page-words-container studied" data-key={i} key={i} onClick={toggleChangeDialog}>
+                            <div className="card-page-showcase-word studied">
+                                <p>{arrayDefaultWords[i]}</p>
+                            </div>
+                            <div className="card-page-showcase-word studied">
+                                <hr className="card-page-words-separator studied"></hr>
+                            </div>
+                            <div className="card-page-showcase-word studied">
+                                <p>{arrayTranslatedWords[i]}</p>
+                            </div>
+                </div>);  
+            }
+                      
         }
         return result;
     }
@@ -220,6 +238,13 @@ export default function CardPage() {
         localStorage.setItem("card", JSON.stringify(newData));
     }
 
+    useEffect(() => {
+        if(card[0].cardQuantity === 0) {
+            handleDeleteCardClick();
+            navigate("/");
+        }
+    }, [card[0].cardQuantity]);
+
     return(
         <>
         <div className="main-panel-container">
@@ -254,6 +279,11 @@ export default function CardPage() {
                     </div>
                     
                     <div className="card-page-showcase-buttons-container">
+                        <Link className="card-page-delete-link card-page-show-link" to={`/cardPage/cardLearnPage/${card[0].cardId}`}>
+                            <button className="card-page-delete-button card-page-show-link">
+                                Start learning process
+                            </button>
+                        </Link>
                         <button className="card-page-change-buttons card-page-change-name-button" onClick={() => handleClickButton("cardName")}>
                                 Edit Card name
                         </button>
