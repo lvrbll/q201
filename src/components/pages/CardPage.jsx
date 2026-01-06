@@ -6,26 +6,101 @@ import { useParams } from "react-router-dom";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function CardPage() {
+    // Variables initialization
     const {id} = useParams();
-    const dialogChangeReference = useRef(null);
-    const dialogAddReference = useRef(null);
-    
-    const [key, setKey] = useState(0);
-    const [card, setCard] = useState(() => {
-        const stored = localStorage.getItem("card");
-        let a = JSON.parse(stored);
-        const res = 
-        a.map(item => {
-            if(item.cardId === id) {
-                return item;
-            } else {
-                return undefined;
-            }
-        });
-        return res.filter((array) => array !== undefined);
-    });
     const navigate = useNavigate();
 
+    const dialogChangeReference = useRef(null);
+    const dialogAddReference = useRef(null);
+
+    const [key, setKey] = useState(0);
+    const [card, setCard] = useState(null);
+    //------------------------------
+
+
+    // Server functions
+    async function fetchData() {
+        const result = await fetch('/api/showAvailableCards');
+        if(result.status === 401) {
+            navigate('/');
+            return;
+        }
+        const isOk = result.ok;
+        if(isOk) {
+            const data = await result.json();
+            data.map(item => {
+                if(item.cardId === id) {
+                    setCard(item);
+                    saveCurrentCardToLocalStorage(item);
+                }
+            })
+
+            return;
+        }
+        console.log("No data have found");
+    }
+
+    async function sendRemoveRequest() {
+        const request = await fetch("/api/removeCard", {
+            method: "POST",
+            headers: {
+                "Content-Type" : "application/json"
+            },
+            body: JSON.stringify({
+                cardId: card.cardId
+            })
+        })
+        const status = request.status;
+        if(status === 401) {
+            navigate('/');
+            return;
+        }
+        const isOK = request.ok;
+        if(isOK) {
+            localStorage.clear();
+            navigate('/');
+        }
+    }
+
+    async function sendUpdateRequest() {
+        await fetch("/api/updateCard", {
+            method: "POST",
+            headers: {
+                "Content-Type" : "application/json"
+            },
+            body: JSON.stringify({
+                card: card
+            })
+        }).then(response => {
+            if(response?.ok) {
+                localStorage.clear();
+                navigate('/');
+            }
+        })
+    }
+    //------------------------------
+
+
+    // Method which is observing state and changes some variables
+    useEffect(() => {
+        fetchData();
+    }, []);
+    //------------------------------
+
+
+    // Function for saving/updating data to/in localStorage
+    function saveCurrentCardToLocalStorage(card) {
+        localStorage.setItem("card", JSON.stringify(card));
+    }
+
+    function updateLocalStorage(newObject) {
+        localStorage.clear();
+        localStorage.setItem("card", JSON.stringify(newObject));
+    }
+    //------------------------------
+
+
+    //Block of dialog toggle functions
     function toggleChangeDialog(e) {
         setKey(e.currentTarget.dataset.key);
         if(!dialogChangeReference.current) {
@@ -37,34 +112,6 @@ export default function CardPage() {
     
     }
 
-    function changeWords(newDefaultWord, newTranslatedWord, targetKey) {
-        if (checkIsEmpty(newDefaultWord, newTranslatedWord)) {
-            closeDialog();
-        }
-        const newCard = card.map(item => {
-                item.cardWordDefault[targetKey] = newDefaultWord;
-                item.cardWordTranslation[targetKey] = newTranslatedWord;
-                return item;
-        })
-        setCard(newCard);
-        updateLocalStorage(newCard);
-    }
-
-    function handleChangeDialogForm(e) {
-        const newDefaultWord = e.currentTarget.elements.defaultWord.value;
-        const newTranslatedWord = e.currentTarget.elements.translatedWord.value;
-        const targetKey = e.currentTarget.elements.wordKey.value;
-
-        changeWords(newDefaultWord, newTranslatedWord, targetKey);
-    }
-
-    function handleAddDialogForm(e) {
-        const newDefaultWord = e.currentTarget.elements.defaultWord.value;
-        const newTranslatedWord = e.currentTarget.elements.translatedWord.value;
-
-        addNewWords(newDefaultWord, newTranslatedWord);
-    }
-
     function toggleAddDialog() {
         if(!dialogAddReference.current) {
             return;
@@ -74,69 +121,71 @@ export default function CardPage() {
             : dialogAddReference.current.showModal();
     
     }
+    //------------------------------
 
-    function addNewWords(newDefaultWord, newTranslatedWord) {
-        if (checkIsEmpty(newDefaultWord, newTranslatedWord)) {
-            closeDialog();
+
+    //Functions for handling dialog actions
+    function handleChangeDialogForm(e) {
+        e.preventDefault();
+        const newDefaultWord = e.currentTarget.elements.defaultWord.value;
+        const newTranslatedWord = e.currentTarget.elements.translatedWord.value;
+        const targetKey = e.currentTarget.elements.wordKey.value;
+
+        changeWords(newDefaultWord, newTranslatedWord, targetKey);
+    }
+
+    function handleAddDialogForm(e) {
+        e.preventDefault();
+        const newDefaultWord = e.currentTarget.elements.defaultWord.value;
+        const newTranslatedWord = e.currentTarget.elements.translatedWord.value;
+
+        addNewWords(newDefaultWord, newTranslatedWord);
+    }
+    //------------------------------
+
+
+    //Functions for changing name/description/image of Card
+    function handleClickButton(buttonKey) {
+        const newInfo = prompt();
+        if(newInfo === null || newInfo === undefined || newInfo === "") {
+            alert("Field can't be empty");
             return;
         }
-        const newCard = card.map(item => {
-            item.cardWordDefault.push(newDefaultWord);
-            item.cardWordTranslation.push(newTranslatedWord);
-            item.cardState.push("unstudied");
-            item.cardQuantity += 1;
-            return item;
-        })
-        setCard(newCard);
+
+        const newCard = JSON.parse(localStorage.getItem("card"));
+        (buttonKey === "cardName") ? newCard.cardName = newInfo : newCard.cardDescription = newInfo;
         updateLocalStorage(newCard);
+        setCard(newCard);
     }
 
-    function closeDialog() {
-        dialogChangeReference.current.close();
-        dialogAddReference.current.close();
-    }
-
-    function checkIsEmpty(newDefaultWord, newTranslatedWord) {
-        if(newDefaultWord === null || newDefaultWord === "" || newTranslatedWord === null || newTranslatedWord === "") {
-            alert("New words can't be empty");
-            return true;
+    function handleClickButtonImageChange(e) {
+        const cardImage = e.target.files[0];
+        if(cardImage === undefined) {
+            alert("You must select an image to continue");
+            return;
         }
-        return false;
-    }
 
-    function handleRemoveWords(e) {
-        const elemnetIndex = e.currentTarget.form.firstChild.value;
-        const newCard = card.map(item => {
-            item.cardWordDefault.splice(elemnetIndex, 1);
-            item.cardWordTranslation.splice(elemnetIndex, 1);
-            item.cardState.splice(elemnetIndex, 1);
-            item.cardQuantity -= 1;
-            return item;
+        const fr = new FileReader();
+        fr.readAsDataURL(cardImage);
+        fr.addEventListener('load', () => {
+            const newImage = fr.result;
+            const newCard = JSON.parse(localStorage.getItem("card"));
+            newCard.cardImage = newImage;
+            updateLocalStorage(newCard);
+            setCard(newCard);
         });
-        setCard(newCard);
-        updateLocalStorage(newCard);
-        closeDialog();
     }
+    //------------------------------
 
-    function handleDeleteCardClick (e) {
-        const data = JSON.parse(localStorage.getItem("card"));
-        const newData = data.map(item => {
-            if(JSON.stringify(item) == JSON.stringify(card[0])) {
-                console.log("xoxma")
-                return null;
-            }
-            return item;
-        }).filter((item) => item !== null);
-        console.log(newData)
-        localStorage.clear();
-        localStorage.setItem("card", JSON.stringify(newData));
-    }
 
-    const words = renderWords();
+    //Render words functions
     function renderWords() {
-        const arrayDefaultWords = card[0].cardWordDefault;
-        const arrayTranslatedWords = card[0].cardWordTranslation;
-        const arrayState = card[0].cardState;
+        if(card === null) {
+            return;
+        }
+        const arrayDefaultWords = card.cardWordDefault;
+        const arrayTranslatedWords = card.cardWordTranslation;
+        const arrayState = card.cardState;
         const result = [];
         for(var i = 0; i < arrayDefaultWords.length; i++) {
             if(arrayState[i] === "unstudied") {
@@ -168,118 +217,115 @@ export default function CardPage() {
         }
         return result;
     }
+    //------------------------------
 
-    function handleClickButton(buttonKey) {
-        const newInfo = prompt();
-        if(newInfo === null || newInfo === undefined || newInfo === "") {
-            alert("Field can't be empty");
+
+    //Words functions
+    function changeWords(newDefaultWord, newTranslatedWord, targetKey) {
+        if (checkIsEmpty(newDefaultWord, newTranslatedWord)) {
+            closeDialog();
+        }
+        const newCard = JSON.parse(localStorage.getItem("card"));
+
+        newCard.cardWordDefault[targetKey] = newDefaultWord;
+        newCard.cardWordTranslation[targetKey] = newTranslatedWord;
+        setCard(newCard);
+        updateLocalStorage(newCard);
+        closeDialog();
+    }
+
+    function addNewWords(newDefaultWord, newTranslatedWord) {
+        if (checkIsEmpty(newDefaultWord, newTranslatedWord)) {
+            closeDialog();
             return;
         }
-
-        const newCard = card.map(item => {
-            const newItem = {}; 
-            for (const [key, value] of Object.entries(item)) {
-                if(key === buttonKey) {
-                    newItem[key] = newInfo;
-                    continue;
-                }
-                newItem[key] = value;
-            }
-            return newItem;
-        });
+        const newCard = JSON.parse(localStorage.getItem("card"));
+        newCard.cardWordDefault.push(newDefaultWord);
+        newCard.cardWordTranslation.push(newTranslatedWord);
+        newCard.cardState.push("unstudied");
+        newCard.cardQuantity = Number(newCard.cardQuantity);
+        newCard.cardQuantity += 1;
         
-        setCard(prev => {
-            return prev = newCard;
-        })
-        updateLocalStorage(newCard)
+        setCard(newCard);
+        updateLocalStorage(newCard);
+        closeDialog();
     }
 
-    function handleClickButtonImageChange(e) {
-        const cardImage = e.target.files[0];
-        if(cardImage === undefined) {
-            alert("You must select an image to continue");
-            return;
+    function handleRemoveWords(e) {
+        const elemnetIndex = e.currentTarget.form.firstChild.value;
+        const newCard = JSON.parse(localStorage.getItem("card"));
+        newCard.cardWordDefault.splice(elemnetIndex, 1);
+        newCard.cardWordTranslation.splice(elemnetIndex, 1);
+        newCard.cardState.splice(elemnetIndex, 1);
+        newCard.cardQuantity = Number(newCard.cardQuantity);
+        newCard.cardQuantity -= 1;
+        setCard(newCard);
+        updateLocalStorage(newCard);
+        closeDialog();
+    }
+    //------------------------------
+
+
+    //Some additional utils functions
+    function checkIsEmpty(newDefaultWord, newTranslatedWord) {
+        if(newDefaultWord === null || newDefaultWord === "" || newTranslatedWord === null || newTranslatedWord === "") {
+            alert("New words can't be empty");
+            return true;
         }
-
-        const fr = new FileReader();
-        fr.readAsDataURL(cardImage);
-        fr.addEventListener('load', () => {
-            const newImage = fr.result;
-            const newCard = card.map(item => {
-                const newObject = {};
-                for (const [key, value] of Object.entries(item)) {
-                    if(key === "cardImage") {
-                        newObject[key] = newImage;
-                        continue;
-                    }
-                    newObject[key] = value;
-                }
-
-                setCard(card.map(item => {
-                    return item = newObject;
-                }))
-
-                return newObject;
-            })
-            updateLocalStorage(newCard);
-        });
+        return false;
     }
 
-    function updateLocalStorage(newObject) {
-        const data = JSON.parse(localStorage.getItem("card"));
-        const newDataElement = newObject[0];
-        const newData = data.map(item => {
-            if(item.cardId === newDataElement.cardId) {
-                item = newDataElement;
-            }
-            return item;
-        });
-        localStorage.clear();
-        localStorage.setItem("card", JSON.stringify(newData));
+    function handleDeleteCardClick (e) {
+        sendRemoveRequest();
     }
 
-    useEffect(() => {
-        if(card[0].cardQuantity === 0) {
-            handleDeleteCardClick();
-            navigate("/");
-        }
-    }, [card[0].cardQuantity]);
+    function handleSaveAndExitClick() {
+        sendUpdateRequest();
+    }
+
+    function closeDialog() {
+        dialogChangeReference.current.close();
+        dialogAddReference.current.close();
+    }
+    //------------------------------
 
     return(
         <>
-        <div className="main-panel-container">
-            <Header header={"Card: " + card[0].cardName}/>
+        {(card === null) ? (<Header header={"Loading..."}/>) : 
+        (
+            <div className="main-panel-container">
+            <Header header={"Card: " + card.cardName}/>
             <main className="card-page-container">
                 <article className="card-page-showcase-container">
                     <div className="card-page-showcase-image-container">
-                        <img src={card[0].cardImage === "empty" ? img : card[0].cardImage} alt="Card Image"  className="card-page-showcase-image"/>
+                        <img src={card.cardImage === "empty" ? img : card.cardImage} alt="Card Image"  className="card-page-showcase-image"/>
                     </div>
                     <div className="card-page-showcase-info-container">
                         <h3 className="card-page-text">General info about card</h3>
                         <div className="card-page-general-info-container">
                             <div className="card-page-showcase-info">
                                 <p className="card-page-paragraph">Card name:</p>
-                                <p className="card-page-paragraph">{" " + card[0].cardName}</p>
+                                <p className="card-page-paragraph">{" " + card.cardName}</p>
                             </div>
                             <div className="card-page-separator-container">
                                 <hr className="navigation-button-separator"/>
                             </div>
                             <div className="card-page-showcase-info">
                                 <p className="card-page-paragraph">Card description:</p>
-                                <p>{" " + card[0].cardDescription}</p>
+                                <p>{" " + card.cardDescription}</p>
                             </div>
                             <div className="card-page-separator-container">
                                 <hr className="navigation-button-separator"/>
                             </div>
                             <div className="card-page-showcase-info">
                                 <p>Quantity of elements:</p>
-                                <p>{" " + card[0].cardQuantity}</p>
+                                <p>{" " + card.cardQuantity}</p>
                             </div>
                         </div>
                     </div>
                     
                     <div className="card-page-showcase-buttons-container">
-                        <Link className="card-page-delete-link card-page-show-link" to={`/cardPage/cardLearnPage/${card[0].cardId}`}>
+                        <Link className="card-page-delete-link card-page-show-link" to={`/cardPage/cardLearnPage/${card.cardId}`}>
                             <button className="card-page-delete-button card-page-show-link">
                                 Start learning process
                             </button>
@@ -296,7 +342,12 @@ export default function CardPage() {
                             </label>
                             <input id="cardPageFileUpload" name="cardPageFileUpload" type="file" onChange={(e) => handleClickButtonImageChange(e)}/>
                         </div>
-                        <Link className="card-page-delete-link" to="/" onClick={() => handleDeleteCardClick()}>
+                        <Link className="card-page-delete-link exit-button" onClick={() => handleSaveAndExitClick()}>
+                            <button className="card-page-delete-button exit-button">
+                                Save and Exit
+                            </button>
+                        </Link>
+                        <Link className="card-page-delete-link" onClick={() => handleDeleteCardClick()}>
                             <button className="card-page-delete-button">
                                 Eradicate Card
                             </button>
@@ -309,10 +360,11 @@ export default function CardPage() {
                         Add a new word
                     </button>
 
-                    {words}
+                    {renderWords()}
                 </div>
             </main>
         </div>
+        )};
         <dialog className="card-page-dialog" ref={dialogChangeReference}>
             <form className="card-page-dialog-form-container" onSubmit={(e) => handleChangeDialogForm(e)}>
                 <input type="text" id="wordKey" name="wordKey" value={key} className="word-key" readOnly/>

@@ -6,6 +6,10 @@ import { Link } from 'react-router-dom';
 
 export default function RightPanel() {
 
+    async function handleLogOutButton() {
+        await fetch("/api/userLogOut");
+        window.location.href = '/';
+    }
 
     return(
         <nav className="right-panel-container">
@@ -27,7 +31,7 @@ export default function RightPanel() {
 
                 <hr className="navigation-button-separator"/>
 
-                <Link className="button-nav button-log-out" to="/">
+                <Link className="button-nav button-log-out" to="/" onClick={handleLogOutButton}>
                     <div className="navigation-button-image-container">
                         <img src={LogOutIcon} alt="Folder Icon" className="navigation-button-image"/>
                     </div>

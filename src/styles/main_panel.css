@@ -7,3 +7,17 @@
     padding: calc(var(--size-base) * 2);
     align-items: center;
 }
+
+.hello-header {
+    font-size: calc(var(--size-base) * 8);
+    font-family: "Noto Sans SemiBold";
+    color: var(--primary-color);
+    padding: calc(var(--size-base) * 8);
+}
+
+.hello-header-container {
+    display: flex;
+    text-align: left;
+    width: 100%;
+    max-width: 80%;
+}

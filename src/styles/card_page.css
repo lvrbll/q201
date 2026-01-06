@@ -57,6 +57,19 @@
 
 /*------------------------------*/
 
+.card-page-delete-link.exit-button {
+    background-color: var(--primary-color);
+}
+
+.card-page-delete-button.exit-button {
+    background-color: var(--primary-color);
+}
+
+.card-page-delete-button.exit-button:hover, .card-page-delete-link.exit-button:hover  {
+    outline-offset: 2px;
+    outline-color: var(--primary-color);
+}
+
 .card-page-delete-link.card-page-show-link {
     background-color: #5362ca;
 }
