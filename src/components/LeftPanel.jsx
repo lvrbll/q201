@@ -17,7 +17,7 @@ export default function LeftPanel() {
             <div className="left-navigation-buttons-container">
                 <hr className="navigation-button-separator"/>
 
-                <Link className="button-nav button-home" to="/">
+                <Link className="button-nav button-home" to="/homePage">
                     <div className="navigation-button-image-container">
                         <img src={HomeIcon} alt="Folder Icon" className="navigation-button-image"/>
                     </div>

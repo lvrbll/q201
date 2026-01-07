@@ -2,15 +2,16 @@ import { useEffect, useState } from "react"
 import "../styles/card_gallery.css"
 import Card from "./Card.jsx"
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "./AuthContext.jsx";
 
 export default function CardGallery() {
     const [cardsArray, setCardsArray] = useState([]);
-    const navigate = useNavigate();
+    const { signOut } = useAuth();
 
     async function fetchData() {
         const result = await fetch('/api/showAvailableCards');
         if (result.status === 401) {
-            navigate('/');
+            signOut();
             return;
         }
         const isOk = result.ok;

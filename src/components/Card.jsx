@@ -17,7 +17,7 @@ export default function Card(props) {
         <article className="card-container">
 
             <div className="card-image-container">
-                <img src={props.cardImage === "empty" || props.cardImage === "" ? img : image} className="card-image"></img>
+                <img src={props.cardImage === "" ? img : image} className="card-image"></img>
             </div>
 
             <div className="card-info-container">

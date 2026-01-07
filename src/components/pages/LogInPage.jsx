@@ -2,10 +2,12 @@ import { useState } from "react";
 import img from "../../assets/images/notfound.jpg"
 import "../../styles/log_in_page.css"
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../AuthContext"; 
 
-export default function LogInPage(props){
+export default function LogInPage(){
     const [currentForm, setCurrentForm] = useState(false);
     const navigate = useNavigate();
+    const { signIn, signUp } = useAuth();
 
     async function handleFormRegister(e) {
         e.preventDefault();
@@ -18,22 +20,12 @@ export default function LogInPage(props){
         if (password2 === "" && password2 === null && password2 === undefined) return;
         if (password1 !== password2) return;
 
-        await fetch("/api/registerNewUser", {
-            method: "POST",
-            headers: {
-                "Content-Type" : "application/json"
-            },
-            body: JSON.stringify({
-                username: username,
-                password: password1
-            })
-        }).then(response => {
-            if(response?.ok) {
-                alert("User has been successfully created!")
-                return;
-            }
-            alert("User already exists!");
-        })
+        try {
+            await signUp(username, password1);
+            navigate('/')
+        } catch (err) {
+            console.log("Error during registration");
+        }
     }
 
     async function handleFormLogIn(e) {
@@ -44,24 +36,12 @@ export default function LogInPage(props){
         if (username === "" && username === null) return;
         if (password === "" && password === null) return;
 
-        await fetch("/api/logInUser", {
-            method: "POST",
-            headers: {
-                "Content-Type" : "application/json"
-            },
-            body: JSON.stringify({
-                username: username,
-                password: password
-            })
-        }).then(response => {
-            if(response?.ok) {
-                props.onStateUpdate(response.json().isLogged);
-                alert("Logged in!")
-                navigate('/');
-                return;
-            }
-            alert("Some data is wrong!");
-        })
+        try {
+            await signIn(username, password);
+            navigate('/homePage')
+        } catch (err) {
+            console.log("Error during log in");
+        }
     }
 
     function handleChangeFormAction() {

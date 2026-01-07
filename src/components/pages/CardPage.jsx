@@ -4,11 +4,13 @@ import img from "../../assets/images/unknown_card_image.jpg";
 import Header from "../Header";
 import { useParams } from "react-router-dom";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../AuthContext";
 
 export default function CardPage() {
     // Variables initialization
     const {id} = useParams();
     const navigate = useNavigate();
+    const { signOut } = useAuth();
 
     const dialogChangeReference = useRef(null);
     const dialogAddReference = useRef(null);
@@ -22,7 +24,7 @@ export default function CardPage() {
     async function fetchData() {
         const result = await fetch('/api/showAvailableCards');
         if(result.status === 401) {
-            navigate('/');
+            signOut();
             return;
         }
         const isOk = result.ok;
@@ -34,7 +36,6 @@ export default function CardPage() {
                     saveCurrentCardToLocalStorage(item);
                 }
             })
-
             return;
         }
         console.log("No data have found");
@@ -52,18 +53,18 @@ export default function CardPage() {
         })
         const status = request.status;
         if(status === 401) {
-            navigate('/');
+            signOut();
             return;
         }
         const isOK = request.ok;
         if(isOK) {
             localStorage.clear();
-            navigate('/');
+            navigate('/homePage');
         }
     }
 
     async function sendUpdateRequest() {
-        await fetch("/api/updateCard", {
+        const request = await fetch("/api/updateCard", {
             method: "POST",
             headers: {
                 "Content-Type" : "application/json"
@@ -71,12 +72,21 @@ export default function CardPage() {
             body: JSON.stringify({
                 card: card
             })
-        }).then(response => {
-            if(response?.ok) {
-                localStorage.clear();
-                navigate('/');
-            }
-        })
+        });
+        
+        const status = request.status;
+        if(status === 401) {
+            localStorage.clear();
+            signOut();
+        }
+
+        const isOk = request.ok;
+        if(!isOk) {
+            console.log("Problem with card update");
+        }
+
+        localStorage.clear();
+        navigate('/homePage');
     }
     //------------------------------
 
@@ -298,7 +308,7 @@ export default function CardPage() {
             <main className="card-page-container">
                 <article className="card-page-showcase-container">
                     <div className="card-page-showcase-image-container">
-                        <img src={card.cardImage === "empty" ? img : card.cardImage} alt="Card Image"  className="card-page-showcase-image"/>
+                        <img src={card.cardImage === "" ? img : card.cardImage} alt="Card Image"  className="card-page-showcase-image"/>
                     </div>
                     <div className="card-page-showcase-info-container">
                         <h3 className="card-page-text">General info about card</h3>
@@ -336,12 +346,12 @@ export default function CardPage() {
                         <button className="card-page-change-buttons card-page-change-description-button" onClick={() => handleClickButton("cardDescription")}>
                                 Edit Card description
                         </button>
-                        <div className="card-page-change-buttons card-page-file-upload-button">
+                        {/* <div className="card-page-change-buttons card-page-file-upload-button">
                             <label htmlFor="cardPageFileUpload" className="card-page-label">
                             Edit Card image
                             </label>
                             <input id="cardPageFileUpload" name="cardPageFileUpload" type="file" onChange={(e) => handleClickButtonImageChange(e)}/>
-                        </div>
+                        </div> */}
                         <Link className="card-page-delete-link exit-button" onClick={() => handleSaveAndExitClick()}>
                             <button className="card-page-delete-button exit-button">
                                 Save and Exit

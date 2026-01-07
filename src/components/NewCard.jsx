@@ -2,14 +2,44 @@ import "../styles/new_card.css";
 import { useState } from "react";
 import green_icon from "../assets/icons/green_delete_icon.svg";
 import blue_icon from "../assets/icons/blue_delete_icon.svg";
+import { useAuth } from "./AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export default function NewCard() {
     const [quantity, setQuantity] = useState(0);
     const [wordFields, setWordFields] = useState([]);
     const [importTransWords, setImportTransWords] = useState([]);
     const [importDefWords, setImportDefWords] = useState([]);
+    const { signOut } = useAuth();
+    const navigate = useNavigate();
 
     const importedFields = importedWords();
+
+    async function sendAddRequest(card) {
+        const request = await fetch("/api/addCard", {
+            method: "POST",
+            headers: {
+                "Content-Type" : "application/json"
+            },
+            body: JSON.stringify({
+                card: card
+            })
+        });
+        
+        const status = request.status;
+        if(status === 401) {
+            localStorage.clear();
+            signOut();
+        }
+
+        const isOk = request.ok;
+        if(!isOk) {
+            console.log("Problem with card update");
+        }
+
+        localStorage.clear();
+        navigate('/homePage');
+    }
 
     function importedWords() {
         let tempOutput = [];
@@ -132,7 +162,7 @@ export default function NewCard() {
         fr.addEventListener('load', () => {
             const url = fr.result;
             card.cardImage = url;
-            putToLocalStorage(card);
+            sendAddRequest(card);
         });
     }
 
@@ -152,13 +182,13 @@ export default function NewCard() {
         const cardName = e.currentTarget.elements.cardName.value;
         const cardDescription = e.currentTarget.elements.cardDescription.value;
 
-        let t;
-        if(e.currentTarget.elements.cardFileUpload.files[0] === undefined) {
-            t = "empty";
-        } else {
-            t = e.currentTarget.elements.cardFileUpload.files[0];
-        }
-        const cardImage = t;
+        // let t;
+        // if(e.currentTarget.elements.cardFileUpload.files[0] === undefined) {
+        //     t = "";
+        // } else {
+        //     t = e.currentTarget.elements.cardFileUpload.files[0];
+        // }
+        const cardImage = "";
 
         const cardId = crypto.randomUUID();
 
@@ -192,21 +222,19 @@ export default function NewCard() {
                 cardId: cardId,
                 cardName: cardName, 
                 cardDescription: cardDescription, 
-                cardImage: "empty", 
+                cardImage: "", 
                 cardWordDefault: cardWordDefaultArrayMapped,
                 cardWordTranslation: cardWordTranslationArrayMapped,
                 cardState: cardState,
                 cardQuantity: quantity
         }
 
-        console.log(card);
-
-        if(cardImage != "empty") {
+        if(cardImage !== "") {
             parseImage(cardImage, card);
             return;
         }
 
-        putToLocalStorage(card);
+        sendAddRequest(card);
     }
 
     return(
@@ -221,8 +249,8 @@ export default function NewCard() {
                 <label htmlFor="cardDescription" className="card-form-label">Enter a Card description: </label>
                 <input type="text" id="cardDescription" name="cardDescription" className="card-form-input" placeholder="Card description" required/>
 
-                <label htmlFor="cardFileUpload" class="card-form-custom-upload">Select a Card image</label>
-                <input type="file" id="cardFileUpload" name="cardFileUpload" className="card-form-image-input"/>
+                {/* <label htmlFor="cardFileUpload" class="card-form-custom-upload">Select a Card image</label>
+                <input type="file" id="cardFileUpload" name="cardFileUpload" className="card-form-image-input"/> */}
 
                 <div className="card-add-button-word-container">
                     <button className="card-button-add-word" type="button" onClick={(e) => handleAddWordButtonClick(e)}>Add a word</button>

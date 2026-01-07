@@ -3,12 +3,17 @@ import SettingsIcon from "../assets/icons/settings_icon.svg";
 import LogOutIcon from "../assets/icons/log_out_icon.svg";
 import "../styles/right_panel.css"
 import { Link } from 'react-router-dom';
+import { useAuth } from "./AuthContext";
 
 export default function RightPanel() {
+    const {signOut} = useAuth();
 
     async function handleLogOutButton() {
-        await fetch("/api/userLogOut");
-        window.location.href = '/';
+        try {
+            await signOut();
+        } catch(err) {
+            console.log("Error during log out proccess!");
+        }
     }
 
     return(
@@ -31,7 +36,7 @@ export default function RightPanel() {
 
                 <hr className="navigation-button-separator"/>
 
-                <Link className="button-nav button-log-out" to="/" onClick={handleLogOutButton}>
+                <Link className="button-nav button-log-out" onClick={handleLogOutButton}>
                     <div className="navigation-button-image-container">
                         <img src={LogOutIcon} alt="Folder Icon" className="navigation-button-image"/>
                     </div>

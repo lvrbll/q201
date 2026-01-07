@@ -12,7 +12,7 @@ export function AuthProvider({ children }) {
         credentials: "include"
       });
       const data = await res.json();
-      setUser(data.isLogged ? data : null);
+      setUser(data.isLogged ? data.username : null);
     } finally {
       setLoading(false);
     }
@@ -22,8 +22,102 @@ export function AuthProvider({ children }) {
     checkAuth();
   }, []);
 
+  async function signUp(username, password) {
+    const request = await fetch("/api/auth/signUp", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type" : "application/json"
+                        },
+                        credentials: 'include',
+                        body: JSON.stringify({
+                            username: username,
+                            password: password
+                        })
+                    });
+    
+    const isOk = request.ok;   
+    if(!isOk) {
+        alert("User already exists!");
+        return;
+    }
+    alert("User has been successfully created!");
+  }
+
+  async function signIn(username, password) {
+    const request = await fetch("/api/auth/signIn", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type" : "application/json"
+                        },
+                        credentials: 'include',
+                        body: JSON.stringify({
+                            username: username,
+                            password: password
+                        })
+                    });
+
+    const isOk = request.ok;   
+    if(!isOk) {
+        alert("Failed to sign in!");
+        return;
+    }
+    const data = await request.json();
+    alert("Welcome, " + data.username + "!");
+    setUser(data.username);
+  }
+
+  async function updateUserData(username, password) {
+    const request = await fetch("/api/auth/updateUserData", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type" : "application/json"
+                        },
+                        credentials: 'include',
+                        body: JSON.stringify({
+                            username: username,
+                            password: password
+                        })
+                    });
+
+    const isOk = request.ok;   
+    if(!isOk) {
+        alert("Failed to update!");
+        return;
+    }
+    signOut();
+  }
+
+  async function removeUser() {
+    const request = await fetch("/api/auth/removeUser", {
+                        method: "GET",
+                        headers: {
+                            "Content-Type" : "application/json"
+                        },
+                        credentials: 'include'
+                    });
+
+    const isOk = request.ok;   
+    if(!isOk) {
+        alert("Failed to remove!");
+        return;
+    }
+    signOut();
+  }
+
+  async function signOut () {
+    const request = await fetch('/api/auth/signOut', {
+      method: 'GET',
+      credentials: 'include',
+    })
+    const isOk = request.ok;
+    if(!isOk) {
+        alert("Failed to sign out");
+    }
+    setUser(null);
+  }
+
   return (
-    <AuthContext.Provider value={{ user, setUser, loading }}>
+    <AuthContext.Provider value={{ user, setUser, loading, signIn, signUp, signOut, updateUserData, removeUser }}>
       {children}
     </AuthContext.Provider>
   );
